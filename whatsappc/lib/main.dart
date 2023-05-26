@@ -66,7 +66,7 @@ class MyHomePage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginScrren()),
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
                 );
               },
               style: ButtonStyle(

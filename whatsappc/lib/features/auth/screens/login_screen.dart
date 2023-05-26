@@ -1,21 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:whatsappc/common/utils/colors.dart';
-
-class LoginScrren extends StatefulWidget {
+// ignore: depend_on_referenced_packages
+import 'package:country_picker/country_picker.dart';
+class LoginScreen extends StatefulWidget {
   static const routeName = '/login_screen';
-  const LoginScrren({super.key});
+  const LoginScreen({super.key});
 
   @override
-  State<LoginScrren> createState() => _LoginScrrenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScrrenState extends State<LoginScrren> {
+class _LoginScreenState extends State<LoginScreen> {
   final phoneController = TextEditingController();
-  bool showCountryCode = false;
+  Country? country;
   @override
   void dispose() {
     phoneController.dispose();
     super.dispose();
+  }
+  void pickCountry(){
+    showCountryPicker(
+      context: context,
+      showPhoneCode: true, // optional. Shows phone code before the country name.
+      onSelect: (Country _country) {
+        setState(() {
+          country = _country;
+        });
+      },
+    );
   }
   @override
   Widget build(BuildContext context) {
@@ -26,39 +38,80 @@ class _LoginScrrenState extends State<LoginScrren> {
         elevation: 0,
         title: const Text('Enter your phone number', textAlign: TextAlign.center,),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Text('WhatsApp will send an SMS message to verify your phone number.'),
-          const SizedBox(height: 10,),
-          TextButton(
-            onPressed: () => {
-              setState((){showCountryCode = true;}),
-            },
-            child: const Text('Pick Country'),
-          ),
-          const SizedBox(height: 5,),
-           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Visibility(
-                visible: showCountryCode,
-                child: const Text('+91')
-              ),
-              SizedBox(
-                width: size.width * 0.7,
-                child: const Expanded(
-                  child: TextField(
-                    //controller: phoneController,
-                    decoration: InputDecoration(
-                      hintText: 'Phone Number',
+      body: Padding(
+        padding: const EdgeInsets.all(18.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: size.height/5,),
+            const Text('WhatsApp will send an SMS message to verify your phone number.', textAlign: TextAlign.center,),
+            const SizedBox(height: 10,),
+            TextButton(
+              onPressed: pickCountry,
+              child: const Text('Pick Country'),
+            ),
+            const SizedBox(height: 5,),
+            SizedBox(
+              height: 50.0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (country!=null)
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      height: double.infinity,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: tabColor),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '+${country!.phoneCode}', 
+                          textAlign: TextAlign.center,
+                        )
+                      ),
+                    ),
+                  const SizedBox(width: 15.0,),
+                  Container(
+                    height: double.infinity,
+                    padding: const EdgeInsets.only(left: 10.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: tabColor),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: SizedBox(
+                      width: size.width * 0.6,
+                      child: const Expanded(
+                        child: TextField(
+                          //controller: phoneController,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Phone Number',
+                          ),
+                        ),
+                      ),
                     ),
                   ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    minimumSize: MaterialStateProperty.all<Size>(
+                      const Size(65, 50),
+                    ),
+                    backgroundColor: MaterialStateProperty.all<Color>(tabColor)
+                  ),
+                  onPressed: ()=>{}, 
+                  child: const Text('Next'),
                 ),
               ),
-            ],
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

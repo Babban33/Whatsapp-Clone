@@ -3,8 +3,8 @@ import 'package:whatsappc/features/auth/screens/login_screen.dart';
 
 Route<dynamic> generateRoute(RouteSettings Settings){
   switch(Settings.name){
-    case LoginScrren.routeName:
-      return MaterialPageRoute(builder: (context) => const LoginScrren());
+    case LoginScreen.routeName:
+      return MaterialPageRoute(builder: (context) => const LoginScreen());
     default:
       return MaterialPageRoute(builder: (context) => Scaffold(
         body: Center(
