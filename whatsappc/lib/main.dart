@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-
-import 'common/widget/custom_button.dart';
+import 'package:whatsappc/common/utils/colors.dart';
+import 'package:whatsappc/features/auth/screens/login_screen.dart';
+import 'package:whatsappc/router.dart';
 
 void main() {
   runApp(const MyApp());
@@ -8,14 +9,13 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Whatsapp clone',
       theme: ThemeData.dark(),
+      onGenerateRoute: (settings) => generateRoute(settings),
       home: const MyHomePage(),
     );
   }
@@ -24,6 +24,7 @@ class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -38,30 +39,44 @@ class MyHomePage extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: size.height/9),
             Image.asset(
               'assets/bg.png',
               height: 340,
               width: 340,
+              color: tabColor,
               fit: BoxFit.cover,
             ),
-            SizedBox(height: 10),
-            const Padding(
-              padding: EdgeInsets.all(15.0),
-              child: Text(
-                'Read our Privacy Policy. Tap "Agree and continue" to accept the Terms of Service.',
-                style: TextStyle(color: Colors.grey),
-                textAlign: TextAlign.center,
+            SizedBox(height: size.height/9),
+            const Expanded(
+              child: Padding(
+                padding: EdgeInsets.all(15.0),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Text(
+                    'Read our Privacy Policy. Tap "Agree and continue" to accept the Terms of Service.',
+                    style: TextStyle(color: Colors.grey),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 10),
-            SizedBox(
-              width: 100,
-              child: CustomButton(
-                text: 'AGREE AND CONTINUE',
-                onPressed: () => {},
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScrren()),
+                );
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(tabColor),
+              ),
+              child: const Text(
+                'AGREE AND CONTINUE',
               ),
             ),
+            const SizedBox(height:25)
           ],
         )
       ),
